@@ -6,8 +6,8 @@ const morgan = require('morgan');
 // const AppError = require("./helpers/ErrApp");
 // const errorController = require("./helpers/ErrController");
 const { appendFile } = require('fs');
-const userRouter = require('./routers/user.router');
-const ErrorController = require('./helpers/ErrorController');
+const userRouter = require('./users/user.router');
+// const ErrorController = require('./helpers/ErrorController');
 require('dotenv').config();
 
 
@@ -20,7 +20,7 @@ class CrudServer {
     this.initMiddleware();
     this.initRouters();
     this.startListener();
-    this.initErrorHandling();
+    // this.initErrorHandling();
   }
 
   initServer() {
@@ -34,12 +34,12 @@ class CrudServer {
     this.server.use('/users', userRouter);
   }
 
-  initErrorHandling() {
-    this.server.all('*', (req, res, next) => {
-      next(new AppError(`Can't fint ${req.originalUrl}`, 404));
-    });
-    this.server.use(ErrorController);
-  }
+  // initErrorHandling() {
+  //   this.server.all('*', (req, res, next) => {
+  //     next(new AppError(`Can't fint ${req.originalUrl}`, 404));
+  //   });
+  //   this.server.use(ErrorController);
+  // }
 
   startListener() {
     this.server.listen(process.env.PORT, () => {
