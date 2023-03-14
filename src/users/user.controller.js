@@ -33,8 +33,13 @@ exports.addUsers = async (req, res, next) => {
 const findUserById = id => {
   const parseId = parseInt(id);
   const indexUser = users.findIndex(user => Number(user.id) === parseId);
-  console.log(indexUser, 'indexUser');
-  console.log(parseId, 'parseId');
+
+  return indexUser;
+};
+
+exports.upDateUsers = async (req, res, next) => {
+  const indexUser = findUserById(req.params.id);
+  users[indexUser] = { ...users[indexUser], ...req.body };
 
   if (indexUser === -1) {
     res.status(404).json({
@@ -43,13 +48,6 @@ const findUserById = id => {
     });
   }
 
-  return indexUser;
-};
-
-exports.upDateUsers = async (req, res, next) => {
-  const indexUser = findUserById(req.params.id);
-  users[indexUser] = { ...users[indexUser], ...req.body };
- 
   res.status(200).json({
     status: 'success',
     data: users[indexUser],
@@ -63,6 +61,13 @@ exports.deleteUsers = async (req, res, next) => {
   }
   users.splice(indexUser, 1);
   console.log(users, 'users');
+
+  if (indexUser === -1) {
+    res.status(404).json({
+      status: 'error',
+      data: 'Dont find user',
+    });
+  }
 
   res.status(200).json({
     status: 'success',
